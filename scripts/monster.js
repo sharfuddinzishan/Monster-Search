@@ -6,17 +6,25 @@ const monsters = document.getElementById('monsters');
 const errorMsg = document.getElementById('errorMsg');
 
 searchButton.addEventListener('click', showMonsters);
+inputMonster.addEventListener('keyup', showMonsters);
 
 function showMonsters() {
+    let searchText = inputMonster.value.toLowerCase();
+    if (!searchText) {
+        return
+    }
+    inputMonster.textContent = '';
     monsters.textContent = '';
     monsterdb.forEach(monster => {
-        getMonster(monster);
+        getMonster(monster, searchText);
     });
 }
 
-let getMonster = singleMonster => {
+let getMonster = (singleMonster, searchText) => {
     let { id, name, username, email } = singleMonster;
-    displayMonster(id, name, username, email);
+    if (name.toLowerCase().includes(searchText) || email.toLowerCase().includes(searchText)) {
+        displayMonster(id, name, username, email);
+    }
 }
 
 let displayMonster = (id, name, username, email) => {
