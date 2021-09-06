@@ -8,12 +8,17 @@ let dataFound;
 searchButton.addEventListener('click', showMonsters);
 inputMonster.addEventListener('keyup', showMonsters);
 
-function showMonsters() {
+function showMonsters(event) {
     let searchText = inputMonster.value.toLowerCase();
-    dataFound = 'No'
+    dataFound = false
+
+    if (event.type === 'click' && !searchText) {
+        errorNoDataFound();
+        return;
+    }
     if (!searchText) {
         monsters.textContent = '';
-        return
+        return;
     }
     inputMonster.textContent = '';
     monsters.textContent = '';
@@ -21,7 +26,7 @@ function showMonsters() {
     monsterdb.forEach(monster => {
         getMonster(monster, searchText);
     });
-    if (dataFound === 'No') {
+    if (!dataFound) {
         errorNoDataFound();
     }
 }
@@ -29,10 +34,10 @@ function showMonsters() {
 let getMonster = (singleMonster, searchText) => {
     let { id, name, username, email } = singleMonster;
     if (name.toLowerCase().includes(searchText) || email.toLowerCase().includes(searchText)) {
-        dataFound = 'Yes';
+        dataFound = true;
         displayMonster(id, name, username, email);
     }
-    dataFound === 'Yes' ? '' : dataFound = 'No'
+    dataFound === true ? '' : dataFound = false
 }
 
 let displayMonster = (id, name, username, email) => {
